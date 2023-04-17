@@ -1,16 +1,24 @@
 package com.example.convidados.repository
 
-class GuestRepository private constructor() {
+import android.content.Context
+import com.example.convidados.GuestModel
+
+class GuestRepository private constructor(context: Context) {
+
+    //instancia o banco de dados
+    private val guestDataBase = GuestDataBase(context)
 
     //singleton
     companion object {
         private lateinit var repository: GuestRepository
 
-        fun getInstance(): GuestRepository {
+        //instancia o repositório
+        fun getInstance(context: Context): GuestRepository {
             if (!Companion::repository.isInitialized) {
-                repository = GuestRepository()
+                repository = GuestRepository(context)
             }
             return repository
         }
     }
+
 }
