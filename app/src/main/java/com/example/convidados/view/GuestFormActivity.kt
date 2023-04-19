@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.example.convidados.GuestModel
 import com.example.convidados.R
 import com.example.convidados.databinding.ActivityGuestFormBinding
+import com.example.convidados.model.GuestModel
 import com.example.convidados.viewmodel.GuestFormViewModel
 
 class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
@@ -29,11 +29,15 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonSave.setOnClickListener(this)
     }
 
-    //trata o botão save
+    //trata o botão save, o campo do nome do convidado e a presença do convidado
     override fun onClick(v: View) {
         if (v.id == R.id.button_save) {
-            //instancia o modelo e transita o dado através do modelo
-            //viewModel.save(GuestModel(10, "Nath", false))
+            val name = binding.editName.text.toString()
+            val presence = binding.radioPresent.isChecked
+
+            //vincula os dados com a GuestFormViewModel | instancia a GuestModel colocada na GuestFormViewModel
+            val model = GuestModel(0, name, presence)
+            viewModel.insert(model)
         }
     }
 }
