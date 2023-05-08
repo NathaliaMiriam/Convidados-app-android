@@ -1,5 +1,6 @@
 package com.example.convidados.constants
 
+//constantes para tornar o código mais seguro
 class DataBaseConstants private constructor() {
 
     object GUEST {

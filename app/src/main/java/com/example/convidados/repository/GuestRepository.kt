@@ -95,10 +95,96 @@ class GuestRepository private constructor(context: Context) {
                 DataBaseConstants.GUEST.COLUMNS.PRESENCE
             )
 
-            //abre o cursor
+            //abre e retorna o cursor - lista os dados
             val cursor = db.query(DataBaseConstants.GUEST.TABLE_NAME, selection, null, null, null, null, null)
 
-            //verificações
+            //interação com o cursor ... desconsiderar as linhas vermelhas, pois não há nada de errado no código, é um bug do Android Studio
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) { //o cursor passa linha a linha da tabela
+
+                    //pega os valores ID - NAME - PRESENCE da tabela:
+
+                    //posição da coluna ID (index da col.) --> getInt() pois o ID é um inteiro
+                    val id = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.ID))
+
+                    //posição da coluna NAME (index da col.) --> getString() pois o NAME é um text
+                    val name = cursor.getString(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.NAME))
+
+                    //posição da coluna PRESENCE (index da col.) --> getInt() pois o PRESENCE retorna um inteiro
+                    val presence = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.PRESENCE))
+
+
+                    //monta o objeto com os dados retornados - a cada passada de linha os dados são adicionados na lista
+                    list.add(GuestModel(id, name, presence == 1))
+                }
+            }
+
+            //fecha o cursor
+            cursor.close()
+
+        } catch (e: Exception) {
+            return list //retorna a lista vazia, caso caia no catch
+        }
+
+        return list //retorna a lista preenchida, caso não caia no catch
+    }
+
+
+    //faz a seleção - listagem dos convidados presentes
+    fun getPresent(): List<GuestModel> { //retorna uma lista de GuestModel
+
+        val list = mutableListOf<GuestModel>() //define o valor para que a lista seja retornada
+
+        try {
+            val db = guestDataBase.readableDatabase //abre a conexão com o banco e lê os dados
+
+            //abre e retorna o cursor - lista os presentes
+            val cursor = db.rawQuery("SELECT id, name, presence FROM Guest WHERE presence = 1", null)
+
+            //interação com o cursor ... desconsiderar as linhas vermelhas, pois não há nada de errado no código, é um bug do Android Studio
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) { //o cursor passa linha a linha da tabela
+
+                    //pega os valores ID - NAME - PRESENCE da tabela:
+
+                    //posição da coluna ID (index da col.) --> getInt() pois o ID é um inteiro
+                    val id = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.ID))
+
+                    //posição da coluna NAME (index da col.) --> getString() pois o NAME é um text
+                    val name = cursor.getString(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.NAME))
+
+                    //posição da coluna PRESENCE (index da col.) --> getInt() pois o PRESENCE retorna um inteiro
+                    val presence = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.PRESENCE))
+
+
+                    //monta o objeto com os dados retornados - a cada passada de linha os dados são adicionados na lista
+                    list.add(GuestModel(id, name, presence == 1))
+                }
+            }
+
+            //fecha o cursor
+            cursor.close()
+
+        } catch (e: Exception) {
+            return list //retorna a lista vazia, caso caia no catch
+        }
+
+        return list //retorna a lista preenchida, caso não caia no catch
+    }
+
+
+    //faz a seleção - listagem dos convidados ausentes
+    fun getAbsent(): List<GuestModel> { //retorna uma lista de GuestModel
+
+        val list = mutableListOf<GuestModel>() //define o valor para que a lista seja retornada
+
+        try {
+            val db = guestDataBase.readableDatabase //abre a conexão com o banco e lê os dados
+
+            //abre e retorna o cursor - lista os ausentes
+            val cursor = db.rawQuery("SELECT id, name, presence FROM Guest WHERE presence = 0", null)
+
+            //interação com o cursor ... desconsiderar as linhas vermelhas, pois não há nada de errado no código, é um bug do Android Studio
             if (cursor != null && cursor.count > 0) {
                 while (cursor.moveToNext()) { //o cursor passa linha a linha da tabela
 
