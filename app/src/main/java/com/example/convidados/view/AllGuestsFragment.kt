@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.convidados.databinding.FragmentAllGuestsBinding
+import com.example.convidados.view.adapter.GuestsAdapter
 import com.example.convidados.viewmodel.AllGuestsViewModel
 
 class AllGuestsFragment : Fragment() {
@@ -15,24 +17,27 @@ class AllGuestsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: AllGuestsViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View {
+
         //instancia a ViewModel
         viewModel = ViewModelProvider(this).get(AllGuestsViewModel::class.java)
 
         _binding = FragmentAllGuestsBinding.inflate(inflater, container, false)
 
-        val root: View = binding.root
+
+        //define o layout da RecyclerView
+        binding.recyclerAllGuests.layoutManager = LinearLayoutManager(context)
+
+        //define e instancia o Adapter --> GuestsAdapter
+        binding.recyclerAllGuests.adapter = GuestsAdapter()
+
 
         //atribuição da lista de convidados --> AllGuestsViewModel
         viewModel.getAll()
 
         observe()
 
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {
