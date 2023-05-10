@@ -17,6 +17,9 @@ class AllGuestsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: AllGuestsViewModel
 
+    //instancia o Adapter como item desta classe/desta fragment
+    private val adapter = GuestsAdapter()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View {
 
         //instancia a ViewModel
@@ -28,8 +31,8 @@ class AllGuestsFragment : Fragment() {
         //define o layout da RecyclerView
         binding.recyclerAllGuests.layoutManager = LinearLayoutManager(context)
 
-        //define e instancia o Adapter --> GuestsAdapter
-        binding.recyclerAllGuests.adapter = GuestsAdapter()
+        //define e instancia o Adapter --> GuestsAdapter --> val adapter (colocada ali em cima)
+        binding.recyclerAllGuests.adapter = adapter //faz a cola
 
 
         //atribuição da lista de convidados --> AllGuestsViewModel
@@ -45,11 +48,11 @@ class AllGuestsFragment : Fragment() {
         _binding = null
     }
 
-
     //obtém a ViewModel e observa a lista de convidados --> AllGuestsViewModel
     private fun observe() {
         viewModel.guests.observe(viewLifecycleOwner) {
-            val s = ""
+            //passa a lista - a fun updatedGuest está em GuestsAdapter
+            adapter.updatedGuests(it)
         }
     }
 }
