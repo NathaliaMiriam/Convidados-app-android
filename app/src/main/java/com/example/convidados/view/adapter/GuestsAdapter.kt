@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.convidados.databinding.RowGuestBinding
 import com.example.convidados.model.GuestModel
+import com.example.convidados.view.listener.OnGuestListener
 import com.example.convidados.view.viewholder.GuestViewHolder
 
 //Por não conseguir instanciar o Adapter em AllGuestsFragment, por ter uma classe abstrata... Criei aqui o meu Adapter ...
@@ -13,15 +14,18 @@ import com.example.convidados.view.viewholder.GuestViewHolder
 
 class GuestsAdapter : RecyclerView.Adapter<GuestViewHolder>() {
 
-    //faz a listagem de convidados p posteriormente atribuir o valor de list (List<GuestModel) ... A princípio uma lista vazia
+    //faz a listagem de convidados p posteriormente atribuir o valor de list (List<GuestModel) ... Passei uma lista vazia só pq precisava de um valor
     private var guestList: List<GuestModel> = listOf()
+
+    //define o listener
+    private lateinit var listener: OnGuestListener
 
     //faz a criação do layout - cria as linhas que estão dentro da RecyclerView --> row_guest ... dentro é esperado alguém do tipo View ... Após criar, ela chama a onBindViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GuestViewHolder {
 
         //infla o layout e espera um elemento de interface (o layout)
         val item = RowGuestBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return GuestViewHolder(item)
+        return GuestViewHolder(item, listener) //recebe um item e o listener
     }
 
     //tamanho da listagem
@@ -33,7 +37,6 @@ class GuestsAdapter : RecyclerView.Adapter<GuestViewHolder>() {
     //ela é chamada depois da criação do layout na onCreateViewHolder (q é o holder)... o holder armazena os elementos de interface
     //e a position foi passada em getItemCount, ou seja, ela chama e recebe o que foi passado lá...
     //o bind foi criado em GuestViewHolder... p fazer a ligação do elemento de interface (holder) com os dados
-
     override fun onBindViewHolder(holder: GuestViewHolder, position: Int) {
         holder.bind(guestList[position]) //(guestList[position]) --> uma posição da lista
     }
@@ -43,4 +46,10 @@ class GuestsAdapter : RecyclerView.Adapter<GuestViewHolder>() {
         guestList = list
         notifyDataSetChanged() //notifica a RecyclerView sobre o recebimento de novas atualizações, para q ela possa se atualizar
     }
+
+    //coloca o listener - fun chamada em AllGuestsFragment
+    fun attachListener(guestListener: OnGuestListener) {
+        listener = guestListener
+    }
 }
+
