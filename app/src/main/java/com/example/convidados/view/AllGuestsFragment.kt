@@ -36,16 +36,17 @@ class AllGuestsFragment : Fragment() {
         binding.recyclerAllGuests.adapter = adapter //faz a cola
 
         //recebe a fun attachListener da GuestsAdapter
-        val listener = object : OnGuestListener { //classe anônima que implementa a interface e implementa os membros conforme abaixo
+        val listener = object : OnGuestListener { //classe anônima que implementa a interface e implementa os membros (onClick e onDelete) conforme abaixo
             override fun onClick(id: Int) {
                 Toast.makeText(context, "Alow, fui clicado!!", Toast.LENGTH_SHORT).show() //ao clicar no convidado a mensagem aparecerá...
             }
 
+            //atribuição da fun delete p a remoção de um convidado da listagem --> AllGuestsViewModel
             override fun onDelete(id: Int) {
-                TODO("Not yet implemented")
+                viewModel.delete(id)
+                viewModel.getAll() //chama a listagem após a remoção do convidado
             }
         }
-        
         //passa a implementação
         adapter.attachListener(listener)
 

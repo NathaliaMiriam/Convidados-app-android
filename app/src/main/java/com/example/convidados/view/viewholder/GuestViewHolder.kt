@@ -1,6 +1,7 @@
 package com.example.convidados.view.viewholder
 
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.convidados.databinding.RowGuestBinding
 import com.example.convidados.model.GuestModel
@@ -18,6 +19,22 @@ class GuestViewHolder(private val bind: RowGuestBinding, private val listener: O
 
         bind.textName.setOnClickListener { //faz a atribuição dos eventos de cliques da listagem
             listener.onClick(guest.id) //ao clicar no convidado terei o id
+        }
+
+        //remoção de convidado da listagem
+        bind.textName.setOnLongClickListener { //evento de clique longo com lâmbida ... ao clicar e segurar o convidado será removido da lista
+
+            //cria a notificação que aparece na aplicação p q o usuário tome a ação de remoção ou não de um convidado
+            AlertDialog.Builder(itemView.context)
+                .setTitle("Remoção de convidado")
+                .setMessage("Tem certeza que deseja seguir com a remoção?")
+                .setPositiveButton("sim") { dialog, which ->
+                    listener.onDelete(guest.id) //se clicar em sim, dispara o onDelete() e a remoção acontece
+                }
+                .setNegativeButton("não", null) //se clicar em não, nada será feito
+                .create()
+                .show()
+            true //retorno do OnLongClickListener é true
         }
     }
 }
