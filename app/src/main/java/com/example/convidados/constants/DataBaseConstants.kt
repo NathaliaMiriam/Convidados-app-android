@@ -4,6 +4,8 @@ package com.example.convidados.constants
 class DataBaseConstants private constructor() {
 
     object GUEST {
+        const val ID = "guestid" //chave do putInt da val bundle --> AllGuestsFragment
+
         const val TABLE_NAME = "Guest"
 
         object COLUMNS {

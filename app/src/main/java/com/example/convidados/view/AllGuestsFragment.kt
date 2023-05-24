@@ -1,5 +1,6 @@
 package com.example.convidados.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.convidados.constants.DataBaseConstants
 import com.example.convidados.databinding.FragmentAllGuestsBinding
 import com.example.convidados.view.adapter.GuestsAdapter
 import com.example.convidados.view.listener.OnGuestListener
@@ -38,7 +40,18 @@ class AllGuestsFragment : Fragment() {
         //recebe a fun attachListener da GuestsAdapter
         val listener = object : OnGuestListener { //classe anônima que implementa a interface e implementa os membros (onClick e onDelete) conforme abaixo
             override fun onClick(id: Int) {
-                Toast.makeText(context, "Alow, fui clicado!!", Toast.LENGTH_SHORT).show() //ao clicar no convidado a mensagem aparecerá...
+
+                //edição de um convidado
+                val intent = Intent(context, GuestFormActivity::class.java) //cria o intent
+
+                val bundle = Bundle() //pega um bundle
+                bundle.putInt(DataBaseConstants.GUEST.ID, id) //'putInt' pois estou recebendo um id --> DataBaseConstants.GUEST.ID(caminho p a chave) | id(é o valor)
+
+                intent.putExtras(bundle) //fornece um pacote de informações para a minha intent
+
+                startActivity(intent) //passa o intent e inicializa a Activity com o pacote de informações a mais (bundle)
+
+                //Toast.makeText(context, "Alow, fui clicado!!", Toast.LENGTH_SHORT).show() //ao clicar no convidado a mensagem aparecerá...
             }
 
             //atribuição da fun delete p a remoção de um convidado da listagem --> AllGuestsViewModel
@@ -47,15 +60,19 @@ class AllGuestsFragment : Fragment() {
                 viewModel.getAll() //chama a listagem após a remoção do convidado
             }
         }
+
         //passa a implementação
         adapter.attachListener(listener)
-
-        //atribuição da lista de convidados --> AllGuestsViewModel
-        viewModel.getAll()
 
         observe()
 
         return binding.root
+    }
+
+    //chama e atualiza a lista de convidados
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAll() //atribuição da lista de convidados --> AllGuestsViewModel
     }
 
     override fun onDestroyView() {
