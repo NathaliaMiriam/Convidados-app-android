@@ -3,6 +3,7 @@ package com.example.convidados.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.convidados.R
@@ -16,7 +17,7 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityGuestFormBinding
     private lateinit var viewModel: GuestFormViewModel
 
-    //na inserção de um convidado na lista o guestId é 0(zero) ... já na atualização o guestId é diferente de 0(zero) --> fun loadData() logo ali embaixo
+    //na inserção de um convidado na lista o guestId é 0(zero) ... já na edição o guestId é diferente de 0(zero) --> fun loadData() logo ali embaixo
     private var guestId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,14 +47,14 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
             val presence = binding.radioPresent.isChecked
 
             //vincula os dados com a GuestFormViewModel | instancia a GuestModel colocada na GuestFormViewModel
-            val model = GuestModel(guestId, name, presence) //var 'guestId' é para inserção ou atualização de um convidado...
-            viewModel.save(model) //salva a insert(inserção de um convidado) ou a update(atualização de um convidado) ... todas as funs na GuestFormViewModel
+            val model = GuestModel(guestId, name, presence) //var 'guestId' é para inserção ou edição de um convidado...
+            viewModel.save(model) //salva a insert(inserção de um convidado) ou a update(edição de um convidado) ... todas as funs na GuestFormViewModel
 
-            finish() //fecha a Activity após a inserção ou atualização de um convidado
+            finish() //fecha a Activity após a inserção ou edição de um convidado
         }
     }
 
-    //observa os dados de um convidado --> GuestFormViewModel
+    //observa os dados de um convidado e as atualizações na lista(inserção ou edição) --> GuestFormViewModel
     private fun observe() {
         viewModel.guest.observe(this, Observer { //traz o valor\a informação de um convidado
             //mostra e diz ao usuário sobre as informações do elemento clicado
@@ -62,6 +63,13 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
                 binding.radioPresent.isChecked = true
             } else { //senão...
                 binding.radioAbsent.isChecked = true
+            }
+        })
+
+        viewModel.saveGuest.observe(this, Observer { //traz as atualizações feitas na lista de convidados
+            if (it != "") { //se o 'it' for diferente de string vazia é mostrado independente do que vier (sucesso ou falha)
+                    Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show() //mostra a mensagem do 'it'
+                finish() //e finaliza
             }
         })
     }

@@ -50,8 +50,6 @@ class AllGuestsFragment : Fragment() {
                 intent.putExtras(bundle) //fornece um pacote de informações para a minha intent
 
                 startActivity(intent) //passa o intent e inicializa a Activity com o pacote de informações a mais (bundle)
-
-                //Toast.makeText(context, "Alow, fui clicado!!", Toast.LENGTH_SHORT).show() //ao clicar no convidado a mensagem aparecerá...
             }
 
             //atribuição da fun delete p a remoção de um convidado da listagem --> AllGuestsViewModel
