@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,9 +19,7 @@ class AllGuestsFragment : Fragment() {
     private var _binding: FragmentAllGuestsBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: AllGuestsViewModel
-
-    //instancia o Adapter como item desta classe/desta fragment
-    private val adapter = GuestsAdapter()
+    private val adapter = GuestsAdapter() //instancia o Adapter como item desta classe/desta fragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View {
 
@@ -67,7 +64,7 @@ class AllGuestsFragment : Fragment() {
         return binding.root
     }
 
-    //chama e atualiza a lista de convidados
+    //chama e atualiza a lista de convidados após uma inserção, edição ou remoção de convidado
     override fun onResume() {
         super.onResume()
         viewModel.getAll() //atribuição da lista de convidados --> AllGuestsViewModel
@@ -78,10 +75,10 @@ class AllGuestsFragment : Fragment() {
         _binding = null
     }
 
-    //obtém a ViewModel e observa a lista de convidados --> AllGuestsViewModel
+    //obtém a ViewModel e observa as atualizações da lista de convidados --> AllGuestsViewModel
     private fun observe() {
+        //recebe e atualiza a lista - a fun updatedGuest está em GuestsAdapter
         viewModel.guests.observe(viewLifecycleOwner) {
-            //passa a lista - a fun updatedGuest está em GuestsAdapter
             adapter.updatedGuests(it)
         }
     }

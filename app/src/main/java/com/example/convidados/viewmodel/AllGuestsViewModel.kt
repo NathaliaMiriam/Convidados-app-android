@@ -24,6 +24,16 @@ class AllGuestsViewModel(application: Application) : AndroidViewModel(applicatio
         listAllGuests.value = repository.getAll()
     }
 
+    //faz a listagem e atribui p AbsentFragment ... chamando o repositório, que por sua vez, vai no banco e tenta fazer a listagem
+    fun getAbsent() {
+        listAllGuests.value = repository.getAbsent()
+    }
+
+    //faz a listagem e atribui p PresentFragment ... chamando o repositório, que por sua vez, vai no banco e tenta fazer a listagem
+    fun getPresent() {
+        listAllGuests.value = repository.getPresent()
+    }
+
     //fun chamada em AllGuestsFragment p fazer a remoção de um convidado da listagem
     fun delete(id: Int) {
         repository.delete(id)
